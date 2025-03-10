@@ -8,25 +8,9 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background-color: #434343; /* Set solid background color */
+            background-color: #434343; /* Gray background */
+            color: white;
             font-family: 'Kalnia', sans-serif;
-            color: white;
-            overflow-x: hidden;
-        }
-
-        /* Glass card styling */
-        .card {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 15px;
-            padding: 50px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            color: white;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            margin: 50px 0;
-            transition: all 0.3s ease-in-out;
         }
 
         .navbar {
@@ -82,8 +66,25 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            color: white;
             margin-top: 80px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            color: white;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            margin: 50px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
         }
 
         button {
@@ -95,7 +96,6 @@
             color: white;
             border-radius: 10px;
             transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-            margin: 10px;
         }
 
         button:hover {
@@ -103,28 +103,48 @@
             transform: scale(1.05);
         }
 
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
+        #savedOutput {
             margin-top: 20px;
+            padding: 20px;
+            background-color: none;
+            border: 1px solid #000000;
+            border-radius: 8px;
         }
+
+        #savedText {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .exclamation {
+            font-size: 40px;
+            cursor: pointer;
+            color: white;
+            display: inline-block;
+            position: relative;
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+        }
+
     </style>
 </head>
 <body>
+
     <nav class="navbar">
         <div class="logo-container">
             <h1>S & S</h1>
         </div>
-        
+
         <div class="hamburger" id="hamburger-icon">
             &#9776;
         </div>
 
         <ul class="nav-links" id="nav-links">
-            <!-- Link pointing to your Google Site -->
-            <li><a href="https://sites.google.com/view/group10saavedrasabuero" id="journal-link" class="active" target="_blank" rel="noopener noreferrer">home</a></li>
+            <li><a href="https://sites.google.com/view/g10saavedrasabuero" id="journal-link" class="active">Home</a></li>
         </ul>
-        
     </nav>
 
     <div class="content">
@@ -134,16 +154,12 @@
             <h3>FITNESS JOURNAL</h3>
             <div id="voiceOutput">Your speech will appear here...</div>
             <button id="startButton">Start Speaking</button>
+            <button id="pauseButton" disabled>Pause Recognition</button>
+            <button id="saveButton" disabled>Save Note</button>
+            <button id="newNoteButton" disabled>Add New Note</button>
             <div id="savedOutput">
                 <strong>Saved Journal:</strong>
                 <p id="savedText">Your saved speech will appear here after you stop speaking.</p>
-            </div>
-
-            <!-- New Action Buttons -->
-            <div class="action-buttons">
-                <button id="addNoteButton">Add New Note</button>
-                <button id="pauseButton">Pause Recognition</button>
-                <button id="saveNoteButton">Save Note</button>
             </div>
         </div>
 
@@ -151,65 +167,92 @@
     </div>
 
     <script>
-        // Check if speech recognition is available
         if (!('webkitSpeechRecognition' in window)) {
-            alert("Your browser does not support the Speech Recognition API.");
+            alert("Speech Recognition is not supported in this browser.");
         } else {
             var recognition = new webkitSpeechRecognition();
             recognition.continuous = true;
             recognition.interimResults = true;
-            let final_transcript = '';
 
-            recognition.onstart = function() {
-                document.getElementById("voiceOutput").textContent = "Listening... Speak now!";
-            };
+            var finalTranscript = '';
+            var isPaused = false;
 
+            const startButton = document.getElementById('startButton');
+            const pauseButton = document.getElementById('pauseButton');
+            const saveButton = document.getElementById('saveButton');
+            const newNoteButton = document.getElementById('newNoteButton');
+            const voiceOutput = document.getElementById("voiceOutput");
+            const savedText = document.getElementById("savedText");
+
+            // Start speech recognition
+            startButton.addEventListener('click', function() {
+                finalTranscript = '';
+                voiceOutput.textContent = 'Listening... Speak now!';
+                recognition.start();
+                startButton.disabled = true;
+                pauseButton.disabled = false;
+                saveButton.disabled = true;
+                newNoteButton.disabled = false;
+            });
+
+            // Pause or resume speech recognition
+            pauseButton.addEventListener('click', function() {
+                if (!isPaused) {
+                    recognition.stop();
+                    pauseButton.textContent = 'Resume Recognition';
+                } else {
+                    recognition.start();
+                    pauseButton.textContent = 'Pause Recognition';
+                }
+                isPaused = !isPaused;
+            });
+
+            // Save the note
+            saveButton.addEventListener('click', function() {
+                savedText.textContent = finalTranscript;
+                startButton.disabled = false;
+                pauseButton.disabled = true;
+                saveButton.disabled = true;
+            });
+
+            // Start a new note
+            newNoteButton.addEventListener('click', function() {
+                finalTranscript = '';
+                voiceOutput.textContent = 'Start Speaking for the New Note';
+                savedText.textContent = '';
+                newNoteButton.disabled = true;
+                saveButton.disabled = true;
+                startButton.disabled = false;
+            });
+
+            // Handle speech results
             recognition.onresult = function(event) {
-                var interim_transcript = '';
-                final_transcript = ''; // Clear any previous final transcript on every result
-
+                var interimTranscript = '';
                 for (var i = event.resultIndex; i < event.results.length; i++) {
                     var transcript = event.results[i][0].transcript;
+                    interimTranscript += transcript;
                     if (event.results[i].isFinal) {
-                        final_transcript += transcript + ' ';
-                    } else {
-                        interim_transcript += transcript;
+                        finalTranscript = transcript;
                     }
                 }
-
-                document.getElementById("voiceOutput").textContent = interim_transcript || final_transcript;
+                voiceOutput.textContent = interimTranscript;
             };
 
-            recognition.onerror = function(event) {
-                document.getElementById("voiceOutput").textContent = "Error: " + event.error;
-            };
-
+            // End of speech recognition
             recognition.onend = function() {
-                document.getElementById("voiceOutput").textContent = "Finished listening!";
+                if (!isPaused) {
+                    voiceOutput.textContent = 'Thank you for sharing your note!';
+                    saveButton.disabled = false;
+                }
             };
 
-            // Start Speech Recognition
-            document.getElementById("startButton").addEventListener("click", function() {
-                recognition.start();
-            });
-
-            // Add New Note (clear the voice output and start fresh)
-            document.getElementById("addNoteButton").addEventListener("click", function() {
-                final_transcript = '';  // Clear the current note
-                document.getElementById("voiceOutput").textContent = 'Your speech will appear here...';
-                document.getElementById("savedText").textContent = '';
-                recognition.stop();  // Stop any ongoing speech recognition process
-            });
-
-            // Pause Recognition (stop listening)
-            document.getElementById("pauseButton").addEventListener("click", function() {
-                recognition.stop();  // Pause the speech recognition process
-            });
-
-            // Save Note (display the final transcribed text in the saved section)
-            document.getElementById("saveNoteButton").addEventListener("click", function() {
-                document.getElementById("savedText").textContent = final_transcript;
-            });
+            // Error handling
+            recognition.onerror = function(event) {
+                console.error('Speech Recognition Error: ', event.error);
+                voiceOutput.textContent = 'Error: ' + event.error;
+                startButton.disabled = false;
+                pauseButton.disabled = true;
+            };
         }
     </script>
 
