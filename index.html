@@ -7,116 +7,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Kalnia&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            background-color: #434343; /* Gray background */
-            color: white;
-            font-family: 'Kalnia', sans-serif;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background-color: rgb(0, 0, 0);
-            z-index: 1000;
-        }
-
-        .logo-container h1 {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style-type: none;
-            margin-left: auto;
-        }
-
-        .nav-links li {
-            margin: 0 20px;
-        }
-
-        .nav-links a {
-            color: rgb(105, 104, 104);
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #ffffff;
-        }
-
-        .nav-links a.active {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            margin-top: 80px;
-        }
-
-        .card {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 15px;
-            padding: 50px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            color: white;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            margin: 50px 0;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        button {
-            padding: 14px 30px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border: none;
-            background-color: #000000;
-            color: white;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #383737;
-            transform: scale(1.05);
-        }
-
         #savedOutput {
             margin-top: 20px;
             padding: 20px;
-            background-color: none;
-            border: 1px solid #000000;
-            border-radius: 8px;
+            background-color: none; 
+            border: 1px solid #000000;   
+            border-radius: 8px;         
         }
 
         #savedText {
-            font-size: 16px;
-            color: #ffffff;
-            line-height: 1.5;
+            font-size: 16px;           
+            color: #ffffff;               
+            line-height: 1.5;           
         }
 
+        #startButton {
+            padding: 10px 20px;
+            background-color: none;
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #startButton:disabled {
+            background-color: #ffffff;
+            cursor: not-allowed;
+        }   
+
+        #voiceOutput {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: none;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            color: white;
+        }
+
+        /* Glasscard Styling */
+        .card {
+            background: rgba(0, 0, 0, 0.5); /* Dark transparent background */
+            border-radius: 15px; /* Rounded corners */
+            padding: 50px; /* Increase padding for more internal space */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Shadow to enhance the effect */
+            color: white;
+            max-width: 600px; /* Increase max-width for larger card */
+            width: 100%; /* Ensure it takes up the full width within the max-width limit */
+            text-align: center;
+            margin: 50px 0; /* Adjust spacing to suit your design */
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Exclamation mark icon moved below the glasscard */
         .exclamation {
             font-size: 40px;
             cursor: pointer;
@@ -126,24 +69,65 @@
             margin-top: 20px;
             display: block;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 30px; /* Space from the glasscard */
         }
+
+        /* Tooltip effect for hover */
+        /* Exclamation mark icon */
+/* Exclamation mark icon */
+/* Exclamation mark icon */
+.exclamation {
+    font-size: 40px;
+    cursor: pointer;
+    color: black; /* Text color for the ? */
+    display: inline-block;
+    position: relative;
+    margin-top: 20px;
+    background-color: white; /* White background */
+    border-radius: 50%; /* Make it circular */
+    width: 50px; /* Set width */
+    height: 50px; /* Set height */
+    text-align: center; /* Center the text inside */
+    line-height: 50px; /* Center the text vertically */
+}
+
+/* Tooltip on hover */
+.exclamation:hover::after {
+    content: "Click the 'Start Speaking' button, and after you're done speaking, the transcribed text will be displayed below the button in the 'Saved Journal' section. To use this feature, make sure to open the page in a browser such as Google Chrome.";
+    position: absolute;
+    bottom: -35px; /* Adjust the position of the tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background for tooltip */
+    color: white; /* White text for the tooltip */
+    padding: 8px 12px; /* Adjust padding for less space */
+    border-radius: 5px;
+    font-size: 12px; /* Smaller font size for better fit */
+    max-width: 300px; /* Limit the width of the tooltip */
+    text-align: left; /* Align text to the left */
+    word-wrap: break-word; /* Ensure long words break and don't overflow */
+    white-space: normal; /* Allow the text to wrap */
+}
+
+
+
 
     </style>
 </head>
 <body>
-
     <nav class="navbar">
         <div class="logo-container">
             <h1>S & S</h1>
         </div>
-
+        
         <div class="hamburger" id="hamburger-icon">
             &#9776;
         </div>
 
         <ul class="nav-links" id="nav-links">
-            <li><a href="https://sites.google.com/view/g10saavedrasabuero" id="journal-link" class="active">Home</a></li>
+            <a href="https://sites.google.com/view/g10saavedrasabuero" id="journal-link" class="active">Journal</a>
+
+            
         </ul>
     </nav>
 
@@ -154,106 +138,69 @@
             <h3>FITNESS JOURNAL</h3>
             <div id="voiceOutput">Your speech will appear here...</div>
             <button id="startButton">Start Speaking</button>
-            <button id="pauseButton" disabled>Pause Recognition</button>
-            <button id="saveButton" disabled>Save Note</button>
-            <button id="newNoteButton" disabled>Add New Note</button>
             <div id="savedOutput">
                 <strong>Saved Journal:</strong>
                 <p id="savedText">Your saved speech will appear here after you stop speaking.</p>
             </div>
         </div>
 
+        <!-- Move the "?" icon below the card -->
         <span class="exclamation">?</span>
     </div>
 
     <script>
-        if (!('webkitSpeechRecognition' in window)) {
-            alert("Speech Recognition is not supported in this browser.");
-        } else {
-            var recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-            var finalTranscript = '';
-            var isPaused = false;
-
-            const startButton = document.getElementById('startButton');
-            const pauseButton = document.getElementById('pauseButton');
-            const saveButton = document.getElementById('saveButton');
-            const newNoteButton = document.getElementById('newNoteButton');
-            const voiceOutput = document.getElementById("voiceOutput");
-            const savedText = document.getElementById("savedText");
-
-            // Start speech recognition
-            startButton.addEventListener('click', function() {
-                finalTranscript = '';
-                voiceOutput.textContent = 'Listening... Speak now!';
-                recognition.start();
-                startButton.disabled = true;
-                pauseButton.disabled = false;
-                saveButton.disabled = true;
-                newNoteButton.disabled = false;
-            });
-
-            // Pause or resume speech recognition
-            pauseButton.addEventListener('click', function() {
-                if (!isPaused) {
-                    recognition.stop();
-                    pauseButton.textContent = 'Resume Recognition';
-                } else {
-                    recognition.start();
-                    pauseButton.textContent = 'Pause Recognition';
-                }
-                isPaused = !isPaused;
-            });
-
-            // Save the note
-            saveButton.addEventListener('click', function() {
-                savedText.textContent = finalTranscript;
-                startButton.disabled = false;
-                pauseButton.disabled = true;
-                saveButton.disabled = true;
-            });
-
-            // Start a new note
-            newNoteButton.addEventListener('click', function() {
-                finalTranscript = '';
-                voiceOutput.textContent = 'Start Speaking for the New Note';
-                savedText.textContent = '';
-                newNoteButton.disabled = true;
-                saveButton.disabled = true;
-                startButton.disabled = false;
-            });
-
-            // Handle speech results
-            recognition.onresult = function(event) {
-                var interimTranscript = '';
-                for (var i = event.resultIndex; i < event.results.length; i++) {
-                    var transcript = event.results[i][0].transcript;
-                    interimTranscript += transcript;
-                    if (event.results[i].isFinal) {
-                        finalTranscript = transcript;
-                    }
-                }
-                voiceOutput.textContent = interimTranscript;
-            };
-
-            // End of speech recognition
-            recognition.onend = function() {
-                if (!isPaused) {
-                    voiceOutput.textContent = 'Thank you for sharing your note!';
-                    saveButton.disabled = false;
-                }
-            };
-
-            // Error handling
-            recognition.onerror = function(event) {
-                console.error('Speech Recognition Error: ', event.error);
-                voiceOutput.textContent = 'Error: ' + event.error;
-                startButton.disabled = false;
-                pauseButton.disabled = true;
-            };
+        if (!SpeechRecognition) {
+            alert("Your browser does not support Speech Recognition API");
         }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-US"; 
+        recognition.interimResults = true; 
+        recognition.maxAlternatives = 1; 
+
+        const voiceOutput = document.getElementById("voiceOutput");
+        const savedText = document.getElementById("savedText");
+        const startButton = document.getElementById("startButton");
+
+        let finalTranscript = "";  
+
+        startButton.addEventListener("click", () => {
+            recognition.start();
+            voiceOutput.textContent = "Listening... Speak now!";
+            startButton.disabled = true; 
+        });
+
+        recognition.onresult = (event) => {
+            let transcript = event.results[0][0].transcript;
+
+            voiceOutput.textContent = transcript;
+
+            if (event.results[0].isFinal) {
+                finalTranscript = transcript;
+            }
+        };
+
+        recognition.onspeechend = () => {
+            setTimeout(() => {
+                voiceOutput.textContent = "Thank you for sharing your fitness journey!";
+            }, 1500); 
+            
+            setTimeout(() => {
+                savedText.textContent = finalTranscript; 
+            }, 2000); 
+            
+            setTimeout(() => {
+                startButton.disabled = false;
+                voiceOutput.textContent = "Your speech will appear here..."; 
+            }, 3000); 
+        };
+
+        recognition.onerror = (event) => {
+            voiceOutput.textContent = "Error: " + event.error;
+            startButton.disabled = false; 
+        };
     </script>
 
     <script>
